@@ -1,0 +1,10 @@
+{
+    "email": "vu@gmail.com",
+    "jwk": {
+        "kty": "EC",
+        "crv": "P-256",
+        "x": "elc4Ui_ZbsfWtRYrHeipy0zmI63GkO39d66BWeTvCK0",
+        "y": "dY-U0OiPe__Gy_DziXlFdlfZfBj_HELAhKfqF0i8dOU"
+    },
+    "password": "123"
+}

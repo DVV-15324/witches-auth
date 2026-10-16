@@ -1,0 +1,517 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "example API",
+    "version": "1.0"
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/v1/auth/login": {
+      "post": {
+        "summary": "User login",
+        "description": "Authenticate user and return JWT token",
+        "tags": [
+          "auth"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Preferred language (e.g., vi-VN, en-US)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "X-Timezone",
+            "in": "header",
+            "description": "Timezone (e.g., Asia/Ho_Chi_Minh)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Login credentials",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "schema": {
+              "$ref": "#/definitions/AppResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/AppResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/logout": {
+      "post": {
+        "summary": "User logout",
+        "description": "Logout user and invalidate JWT token",
+        "tags": [
+          "auth"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Preferred language (e.g., vi-VN, en-US)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "X-Timezone",
+            "in": "header",
+            "description": "Timezone (e.g., Asia/Ho_Chi_Minh)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "DPoP access token for authentication",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "DPoP",
+            "in": "header",
+            "description": "DPoP proof JWT",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logout successful",
+            "schema": {
+              "$ref": "#/definitions/AppResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/AppResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/refresh": {
+      "post": {
+        "summary": "Refresh access token",
+        "description": "Get new access token using refresh token",
+        "tags": [
+          "auth"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Preferred language (e.g., vi-VN, en-US)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "X-Timezone",
+            "in": "header",
+            "description": "Timezone (e.g., Asia/Ho_Chi_Minh)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Refresh token",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RefreshTokenRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token refreshed successfully",
+            "schema": {
+              "$ref": "#/definitions/AppResponse"
+            }
+          },
+          "401": {
+            "description": "Invalid or expired refresh token",
+            "schema": {
+              "$ref": "#/definitions/AppResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/register": {
+      "post": {
+        "summary": "User registration",
+        "description": "Register a new user account",
+        "tags": [
+          "auth"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Preferred language (e.g., vi-VN, en-US)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "X-Timezone",
+            "in": "header",
+            "description": "Timezone (e.g., Asia/Ho_Chi_Minh)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User registration data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Register"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Registration successful",
+            "schema": {
+              "$ref": "#/definitions/AppResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/AppResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/get_user": {
+      "post": {
+        "summary": "Get user by ID",
+        "description": "Get user details by user ID",
+        "tags": [
+          "user"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Preferred language (e.g., vi-VN, en-US)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "X-Timezone",
+            "in": "header",
+            "description": "Timezone (e.g., Asia/Ho_Chi_Minh)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "DPoP",
+            "in": "header",
+            "description": "DPoP proof",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "DPoP access token for authentication",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "DPoP",
+            "in": "header",
+            "description": "DPoP proof JWT",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User ID",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found",
+            "schema": {
+              "$ref": "#/definitions/AppResponse"
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "schema": {
+              "$ref": "#/definitions/AppResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/get_user_all": {
+      "post": {
+        "summary": "Get all users",
+        "description": "Get list of all users",
+        "tags": [
+          "user"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Preferred language (e.g., vi-VN, en-US)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "X-Timezone",
+            "in": "header",
+            "description": "Timezone (e.g., Asia/Ho_Chi_Minh)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "DPoP access token for authentication",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "DPoP",
+            "in": "header",
+            "description": "DPoP proof JWT",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Pagenation request",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Pagenation request",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Pagenation request",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Pagenation request",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "Pagenation request",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users list",
+            "schema": {
+              "$ref": "#/definitions/AppResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AppResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object"
+        },
+        "message": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "timestamp": {
+          "type": "string"
+        }
+      }
+    },
+    "Login": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "jwk": {
+          "type": "object"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "RefreshTokenRequest": {
+      "type": "object",
+      "properties": {
+        "refresh_token": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "refresh_token"
+      ]
+    },
+    "Register": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "v1",
+      "description": "API Version 1"
+    },
+    {
+      "name": "auth",
+      "description": "Auth endpoints"
+    },
+    {
+      "name": "user",
+      "description": "User endpoints"
+    },
+    {
+      "name": "refresh",
+      "description": "Refresh endpoints"
+    }
+  ]
+}
