@@ -2,8 +2,8 @@ package handler
 
 import (
 	"errors"
-	dtoAuth "example/internal/auth/dto/request"
-	mapping "example/internal/auth/mapping"
+	dtoAuth "github.com/DVV-15324/witches-auth/internal/auth/dto/request"
+	mapping "github.com/DVV-15324/witches-auth/internal/auth/mapping"
 	"time"
 
 	w_easyjson "github.com/DVV-15324/witches/pkg/core/easyjson"

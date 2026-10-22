@@ -3,9 +3,9 @@ package repository
 import (
 	"context"
 	"errors"
-	mapping "example/internal/refresh/mapping"
-	modelRefresh "example/internal/refresh/model"
-	domainRefresh "example/internal/shared/domain"
+	mapping "github.com/DVV-15324/witches-auth/internal/refresh/mapping"
+	modelRefresh "github.com/DVV-15324/witches-auth/internal/refresh/model"
+	domainRefresh "github.com/DVV-15324/witches-auth/internal/shared/domain"
 	"gorm.io/gorm"
 	"time"
 )

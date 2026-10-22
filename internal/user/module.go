@@ -1,11 +1,11 @@
 package user
 
 import (
-	core "example/cmd/server/core"
+	core "github.com/DVV-15324/witches-auth/cmd/server/core"
 
-	handler "example/internal/user/handler"
-	"example/internal/user/repository"
-	usecase_user "example/internal/user/usecase"
+	handler "github.com/DVV-15324/witches-auth/internal/user/handler"
+	"github.com/DVV-15324/witches-auth/internal/user/repository"
+	usecase_user "github.com/DVV-15324/witches-auth/internal/user/usecase"
 
 	w_handl "github.com/DVV-15324/witches/pkg/core/handler"
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"

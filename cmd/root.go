@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"context"
-	"example/cmd/server/config"
-	routes "example/cmd/server/routers"
 	"fmt"
+	"github.com/DVV-15324/witches-auth/cmd/server/config"
+	routes "github.com/DVV-15324/witches-auth/cmd/server/routers"
 	w_utils "github.com/DVV-15324/witches/pkg/core/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"

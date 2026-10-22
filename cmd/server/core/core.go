@@ -1,10 +1,10 @@
 package core
 
 import (
-	"example/internal/shared/utils"
-	pkg "example/pkg"
-	w_redis "example/pkg/redis"
 	"fmt"
+	"github.com/DVV-15324/witches-auth/internal/shared/utils"
+	pkg "github.com/DVV-15324/witches-auth/pkg"
+	w_redis "github.com/DVV-15324/witches-auth/pkg/redis"
 	wcmd_utils "github.com/DVV-15324/witches/cmd/utils"
 	w_db "github.com/DVV-15324/witches/pkg/core/database/connect/sql"
 	"github.com/DVV-15324/witches/pkg/core/response/logger"

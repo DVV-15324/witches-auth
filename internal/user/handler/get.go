@@ -2,9 +2,9 @@ package handler
 
 import (
 	"errors"
-	utils "example/internal/shared/utils"
-	dtoUser "example/internal/user/dto/response"
-	mapping "example/internal/user/mapping"
+	utils "github.com/DVV-15324/witches-auth/internal/shared/utils"
+	dtoUser "github.com/DVV-15324/witches-auth/internal/user/dto/response"
+	mapping "github.com/DVV-15324/witches-auth/internal/user/mapping"
 	"time"
 
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"

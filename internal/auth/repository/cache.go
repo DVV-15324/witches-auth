@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 
-	modelAuth "example/internal/auth/model"
+	modelAuth "github.com/DVV-15324/witches-auth/internal/auth/model"
 
 	"time"
 

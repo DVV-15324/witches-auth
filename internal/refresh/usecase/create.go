@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	domainRefresh "example/internal/shared/domain"
+	domainRefresh "github.com/DVV-15324/witches-auth/internal/shared/domain"
 
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"
 )

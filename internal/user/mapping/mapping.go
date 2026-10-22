@@ -1,10 +1,10 @@
 package mapping
 
 import (
-	domainUser "example/internal/shared/domain"
-	"example/internal/shared/utils"
-	dtoUser "example/internal/user/dto/response"
-	modelUser "example/internal/user/model"
+	domainUser "github.com/DVV-15324/witches-auth/internal/shared/domain"
+	"github.com/DVV-15324/witches-auth/internal/shared/utils"
+	dtoUser "github.com/DVV-15324/witches-auth/internal/user/dto/response"
+	modelUser "github.com/DVV-15324/witches-auth/internal/user/model"
 	w_utils "github.com/DVV-15324/witches/pkg/core/utils"
 )
 

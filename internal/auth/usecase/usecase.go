@@ -2,10 +2,10 @@ package usecase
 
 import (
 	"context"
-	core "example/cmd/server/core"
-	domainAuth "example/internal/shared/domain"
-	domainRefresh "example/internal/shared/domain"
-	domainUser "example/internal/shared/domain"
+	core "github.com/DVV-15324/witches-auth/cmd/server/core"
+	domainAuth "github.com/DVV-15324/witches-auth/internal/shared/domain"
+	domainRefresh "github.com/DVV-15324/witches-auth/internal/shared/domain"
+	domainUser "github.com/DVV-15324/witches-auth/internal/shared/domain"
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"
 )
 

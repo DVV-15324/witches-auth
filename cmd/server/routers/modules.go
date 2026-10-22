@@ -1,10 +1,10 @@
 package routers
 
 import (
-	"example/cmd/server/core"
-	"example/internal/auth"
-	"example/internal/refresh"
-	"example/internal/user"
+	"github.com/DVV-15324/witches-auth/cmd/server/core"
+	"github.com/DVV-15324/witches-auth/internal/auth"
+	"github.com/DVV-15324/witches-auth/internal/refresh"
+	"github.com/DVV-15324/witches-auth/internal/user"
 )
 
 type Modules struct {

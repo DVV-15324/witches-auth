@@ -2,7 +2,7 @@ package handler
 
 import (
 	"errors"
-	dtoRefresh "example/internal/refresh/dto/request"
+	dtoRefresh "github.com/DVV-15324/witches-auth/internal/refresh/dto/request"
 	"time"
 
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"

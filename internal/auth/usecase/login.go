@@ -3,12 +3,12 @@ package usecase
 import (
 	"context"
 	"errors"
-	domainAuth "example/internal/shared/domain"
-	domainToken "example/internal/shared/domain"
-	utils "example/internal/shared/utils"
-	pkg "example/pkg"
-	pkg_dpop "example/pkg/dpop"
 	"fmt"
+	domainAuth "github.com/DVV-15324/witches-auth/internal/shared/domain"
+	domainToken "github.com/DVV-15324/witches-auth/internal/shared/domain"
+	utils "github.com/DVV-15324/witches-auth/internal/shared/utils"
+	pkg "github.com/DVV-15324/witches-auth/pkg"
+	pkg_dpop "github.com/DVV-15324/witches-auth/pkg/dpop"
 	"time"
 
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"

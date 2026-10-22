@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	modelRefresh "example/internal/refresh/model"
+	modelRefresh "github.com/DVV-15324/witches-auth/internal/refresh/model"
 	"time"
 
 	"github.com/redis/go-redis/v9"

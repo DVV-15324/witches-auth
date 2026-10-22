@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	domainAuth "example/internal/shared/domain"
+	domainAuth "github.com/DVV-15324/witches-auth/internal/shared/domain"
 	"time"
 
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"

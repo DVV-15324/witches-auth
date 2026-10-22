@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"example/cmd/server/core"
+	"github.com/DVV-15324/witches-auth/cmd/server/core"
 )
 
 type RefreshTokenRepository struct {

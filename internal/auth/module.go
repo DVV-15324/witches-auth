@@ -1,13 +1,13 @@
 package auth
 
 import (
-	core "example/cmd/server/core"
-	dtoAuth "example/internal/auth/dto/request"
-	handler_auth "example/internal/auth/handler"
-	"example/internal/auth/repository"
-	usecase_auth "example/internal/auth/usecase"
-	usecase_refresh "example/internal/refresh/usecase"
-	usecase_user "example/internal/user/usecase"
+	core "github.com/DVV-15324/witches-auth/cmd/server/core"
+	dtoAuth "github.com/DVV-15324/witches-auth/internal/auth/dto/request"
+	handler_auth "github.com/DVV-15324/witches-auth/internal/auth/handler"
+	"github.com/DVV-15324/witches-auth/internal/auth/repository"
+	usecase_auth "github.com/DVV-15324/witches-auth/internal/auth/usecase"
+	usecase_refresh "github.com/DVV-15324/witches-auth/internal/refresh/usecase"
+	usecase_user "github.com/DVV-15324/witches-auth/internal/user/usecase"
 	w_handl "github.com/DVV-15324/witches/pkg/core/handler"
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"
 	"github.com/ulule/limiter/v3"

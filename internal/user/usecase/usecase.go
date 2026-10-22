@@ -2,9 +2,9 @@ package usecase
 
 import (
 	"context"
-	"example/cmd/server/core"
+	"github.com/DVV-15324/witches-auth/cmd/server/core"
 
-	domainUser "example/internal/shared/domain"
+	domainUser "github.com/DVV-15324/witches-auth/internal/shared/domain"
 	w_utils "github.com/DVV-15324/witches/pkg/core/utils"
 )
 

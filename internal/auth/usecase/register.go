@@ -5,11 +5,11 @@ import (
 	"errors"
 	"time"
 
-	pkg "example/pkg"
+	pkg "github.com/DVV-15324/witches-auth/pkg"
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"
 
-	domainAuth "example/internal/shared/domain"
-	domainUser "example/internal/shared/domain"
+	domainAuth "github.com/DVV-15324/witches-auth/internal/shared/domain"
+	domainUser "github.com/DVV-15324/witches-auth/internal/shared/domain"
 )
 
 func (a *AuthUseCase) Register(ctx context.Context, auth *domainAuth.Auth, name string) *w_resp.AppError {

@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"example/cmd/server/core"
+	"github.com/DVV-15324/witches-auth/cmd/server/core"
 	wcmd_utils "github.com/DVV-15324/witches/cmd/utils"
 	"github.com/gin-gonic/gin"
 )

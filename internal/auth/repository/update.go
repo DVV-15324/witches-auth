@@ -3,9 +3,9 @@ package repository
 import (
 	"context"
 
-	"example/internal/auth/mapping"
-	modelAuth "example/internal/auth/model"
-	domainAuth "example/internal/shared/domain"
+	"github.com/DVV-15324/witches-auth/internal/auth/mapping"
+	modelAuth "github.com/DVV-15324/witches-auth/internal/auth/model"
+	domainAuth "github.com/DVV-15324/witches-auth/internal/shared/domain"
 )
 
 func (r *AuthRepository) UpdateAuth(ctx context.Context, modleAuth *domainAuth.Auth) error {

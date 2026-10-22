@@ -1,4 +1,4 @@
-module example
+module github.com/DVV-15324/witches-auth
 
 go 1.25.12
 

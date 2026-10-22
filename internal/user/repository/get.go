@@ -3,9 +3,9 @@ package repository
 import (
 	"context"
 	"errors"
-	domainUser "example/internal/shared/domain"
-	mapping "example/internal/user/mapping"
-	modelUser "example/internal/user/model"
+	domainUser "github.com/DVV-15324/witches-auth/internal/shared/domain"
+	mapping "github.com/DVV-15324/witches-auth/internal/user/mapping"
+	modelUser "github.com/DVV-15324/witches-auth/internal/user/model"
 
 	w_utils "github.com/DVV-15324/witches/pkg/core/utils"
 

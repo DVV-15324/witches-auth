@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"example/cmd/server/core"
+	"github.com/DVV-15324/witches-auth/cmd/server/core"
 	w_utils "github.com/DVV-15324/witches/pkg/core/utils"
 	"gorm.io/gorm"
 )
@@ -24,4 +24,3 @@ func (u *UserRepository) getDB(ctx context.Context) *gorm.DB {
 	}
 	return u.core.DB
 }
-

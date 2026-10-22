@@ -3,9 +3,9 @@ package usecase
 import (
 	"context"
 	"errors"
-	"example/internal/shared/utils"
-	pkg "example/pkg"
 	"fmt"
+	"github.com/DVV-15324/witches-auth/internal/shared/utils"
+	pkg "github.com/DVV-15324/witches-auth/pkg"
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"
 	"github.com/google/uuid"
 	"time"

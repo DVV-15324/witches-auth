@@ -2,8 +2,8 @@ package handler
 
 import (
 	"context"
-	core "example/cmd/server/core"
-	pkg "example/pkg"
+	core "github.com/DVV-15324/witches-auth/cmd/server/core"
+	pkg "github.com/DVV-15324/witches-auth/pkg"
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"
 )
 

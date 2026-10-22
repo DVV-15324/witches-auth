@@ -1,13 +1,13 @@
 package refresh
 
 import (
-	core "example/cmd/server/core"
-	usecase_auth "example/internal/auth/usecase"
-	dtoRefresh "example/internal/refresh/dto/request"
-	handler "example/internal/refresh/handler"
-	"example/internal/refresh/repository"
-	usecase_refresh "example/internal/refresh/usecase"
-	usecase_user "example/internal/user/usecase"
+	core "github.com/DVV-15324/witches-auth/cmd/server/core"
+	usecase_auth "github.com/DVV-15324/witches-auth/internal/auth/usecase"
+	dtoRefresh "github.com/DVV-15324/witches-auth/internal/refresh/dto/request"
+	handler "github.com/DVV-15324/witches-auth/internal/refresh/handler"
+	"github.com/DVV-15324/witches-auth/internal/refresh/repository"
+	usecase_refresh "github.com/DVV-15324/witches-auth/internal/refresh/usecase"
+	usecase_user "github.com/DVV-15324/witches-auth/internal/user/usecase"
 	w_handl "github.com/DVV-15324/witches/pkg/core/handler"
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"
 	"github.com/ulule/limiter/v3"

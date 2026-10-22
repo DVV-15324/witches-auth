@@ -3,13 +3,13 @@ package middleware
 import (
 	"context"
 	"errors"
-	"example/cmd/server/core"
-	domainRefresh "example/internal/shared/domain"
-	utils "example/internal/shared/utils"
+	"github.com/DVV-15324/witches-auth/cmd/server/core"
+	domainRefresh "github.com/DVV-15324/witches-auth/internal/shared/domain"
+	utils "github.com/DVV-15324/witches-auth/internal/shared/utils"
 	"strings"
 	"time"
 
-	pkg_dpop "example/pkg/dpop"
+	pkg_dpop "github.com/DVV-15324/witches-auth/pkg/dpop"
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"
 	w_utils "github.com/DVV-15324/witches/pkg/core/utils"
 	"github.com/gin-gonic/gin"
