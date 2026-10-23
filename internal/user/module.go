@@ -47,7 +47,6 @@ func (m *UserModule) RegisterProtectedRoutes(gen *w_handl.SwaggerGenerator) {
 		HeaderParam("DPoP", "DPoP proof", false).
 		RateLimit(limiter.Rate{Period: m.Core.Limiter.Rate.Period, Limit: m.Core.Limiter.Rate.Limit}).
 		HeaderParam("Authorization", "DPoP access token for authentication", false).
-		HeaderParam("DPoP", "DPoP proof JWT", false).
 		Body(map[string]int{"id": 0}, "User ID").
 		Response(200, w_resp.AppResponse{}, "User found").
 		Response(404, w_resp.AppResponse{}, "User not found").
