@@ -7,8 +7,8 @@ import (
 	"time"
 
 	utils "github.com/DVV-15324/witches-auth/internal/shared/utils"
+	pkg "github.com/DVV-15324/witches-auth/pkg"
 	domainRefresh "github.com/DVV-15324/witches-auth/pkg/shared/domain"
-
 	// Thư viện dùng chung (Witches)
 	pkg_dpop "github.com/DVV-15324/witches-auth/pkg/dpop"
 	wcmd_utils "github.com/DVV-15324/witches/cmd/utils"
@@ -17,7 +17,6 @@ import (
 	w_utils "github.com/DVV-15324/witches/pkg/core/utils"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
 )
 
 type UsecaseRefresh interface {
@@ -25,7 +24,7 @@ type UsecaseRefresh interface {
 }
 
 type JWTService interface {
-	ParseToken(ctx context.Context, token string) (*JwtClaims, *w_resp.AppError)
+	ParseToken(ctx context.Context, token string) (*pkg.JwtClaims, error)
 }
 
 type BlacklistService interface {
@@ -33,24 +32,8 @@ type BlacklistService interface {
 }
 
 type SessionService interface {
-	ValidateSession(ctx context.Context, userID int64, jkt string, accessToken string) (bool, error)
+	ValidateSession(ctx context.Context, userID int64, jkt string, accessToken string) (*pkg.SessionCache, error)
 	UpdateLastActive(ctx context.Context, userID int64, dpopProof string) error
-}
-
-type Confirmation struct {
-	JKT string `json:"jkt"`
-}
-
-type JwtClaims struct {
-	jwt.RegisteredClaims
-	CNF *Confirmation `json:"cnf,omitempty"`
-}
-
-func (c *JwtClaims) GetJKT() string {
-	if c == nil || c.CNF == nil {
-		return ""
-	}
-	return c.CNF.JKT
 }
 
 type AuthDependencies struct {
