@@ -3,59 +3,106 @@ package middleware
 import (
 	"context"
 	"errors"
-	"github.com/DVV-15324/witches-auth/cmd/server/core"
-	utils "github.com/DVV-15324/witches-auth/internal/shared/utils"
-	domainRefresh "github.com/DVV-15324/witches-auth/pkg/shared/domain"
 	"strings"
 	"time"
 
+	utils "github.com/DVV-15324/witches-auth/internal/shared/utils"
+	domainRefresh "github.com/DVV-15324/witches-auth/pkg/shared/domain"
+
+	// Thư viện dùng chung (Witches)
 	pkg_dpop "github.com/DVV-15324/witches-auth/pkg/dpop"
+	wcmd_utils "github.com/DVV-15324/witches/cmd/utils"
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"
+	"github.com/DVV-15324/witches/pkg/core/response/logger"
 	w_utils "github.com/DVV-15324/witches/pkg/core/utils"
+
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 type UsecaseRefresh interface {
 	GetByJKT(ctx context.Context, JKT string) (*domainRefresh.RefreshToken, *w_resp.AppError)
 }
 
-func AuthMiddleware(usecaseRefresh UsecaseRefresh, core *core.CoreServices) gin.HandlerFunc {
+type JWTService interface {
+	ParseToken(ctx context.Context, token string) (*JwtClaims, *w_resp.AppError)
+}
+
+type BlacklistService interface {
+	IsTokenBlacklisted(ctx context.Context, token string) bool
+}
+
+type SessionService interface {
+	ValidateSession(ctx context.Context, userID int64, jkt string, accessToken string) (bool, error)
+	UpdateLastActive(ctx context.Context, userID int64, dpopProof string) error
+}
+
+type Confirmation struct {
+	JKT string `json:"jkt"`
+}
+
+type JwtClaims struct {
+	jwt.RegisteredClaims
+	CNF *Confirmation `json:"cnf,omitempty"`
+}
+
+func (c *JwtClaims) GetJKT() string {
+	if c == nil || c.CNF == nil {
+		return ""
+	}
+	return c.CNF.JKT
+}
+
+type AuthDependencies struct {
+	UsecaseRefresh UsecaseRefresh
+	JWT            JWTService
+	Blacklist      BlacklistService
+	Session        SessionService
+	Logger         *logger.ModelLogger
+	Config         *wcmd_utils.Config
+}
+
+func AuthMiddleware(deps AuthDependencies) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// access token
 		accessToken, err := ExtractDPoPTokenFromHeader(c.GetHeader("Authorization"))
 		if err != nil {
 			resp := w_resp.NewAppError(401, err, time.Now())
-			w_resp.WriteErrorWithLog(c, core.Logger, core.Config, resp)
+			w_resp.WriteErrorWithLog(c, deps.Logger, deps.Config, resp)
 			c.Abort()
 			return
 		}
-		claims, errResp := core.JWT.ParseToken(c.Request.Context(), accessToken)
+
+		claims, errResp := deps.JWT.ParseToken(c.Request.Context(), accessToken)
 		if errResp != nil {
 			resp := w_resp.NewAppError(401, errResp, time.Now())
-			w_resp.WriteErrorWithLog(c, core.Logger, core.Config, resp)
+			w_resp.WriteErrorWithLog(c, deps.Logger, deps.Config, resp)
 			c.Abort()
 			return
 		}
 
 		dpopProof := c.GetHeader("DPoP")
 		jkt := claims.GetJKT()
-		refreshToken, err_jkt := usecaseRefresh.GetByJKT(c, jkt)
+
+		refreshToken, err_jkt := deps.UsecaseRefresh.GetByJKT(c, jkt)
 		if err_jkt != nil {
-			w_resp.WriteErrorWithLog(c, core.Logger, core.Config, err_jkt)
+			w_resp.WriteErrorWithLog(c, deps.Logger, deps.Config, err_jkt)
 			c.Abort()
 			return
 		}
+
 		proof_, err_verity := pkg_dpop.DPoPVerify(c, dpopProof, refreshToken.JKT, 5*time.Second, accessToken)
 		if err_verity != nil {
 			resp := w_resp.NewAppError(401, err_verity, time.Now())
-			w_resp.WriteErrorWithLog(c, core.Logger, core.Config, resp)
+			w_resp.WriteErrorWithLog(c, deps.Logger, deps.Config, resp)
 			c.Abort()
 			return
 		}
-		isBlacklisted := core.Blacklist.IsTokenBlacklisted(c.Request.Context(), accessToken)
+
+		isBlacklisted := deps.Blacklist.IsTokenBlacklisted(c.Request.Context(), accessToken)
 		if isBlacklisted {
 			resp := w_resp.NewAppError(401, errors.New("Error: token has been revoked"), time.Now())
-			w_resp.WriteErrorWithLog(c, core.Logger, core.Config, resp)
+			w_resp.WriteErrorWithLog(c, deps.Logger, deps.Config, resp)
 			c.Abort()
 			return
 		}
@@ -65,23 +112,24 @@ func AuthMiddleware(usecaseRefresh UsecaseRefresh, core *core.CoreServices) gin.
 
 		if userID == 0 {
 			resp := w_resp.NewAppError(401, errors.New("Error: invalid user ID in token"), time.Now())
-			w_resp.WriteErrorWithLog(c, core.Logger, core.Config, resp)
+			w_resp.WriteErrorWithLog(c, deps.Logger, deps.Config, resp)
 			c.Abort()
 			return
 		}
-		reqCtx := w_utils.GetRequestContext(c.Request.Context(), core.Config)
 
-		_, err = core.Session.ValidateSession(c.Request.Context(), userID, proof_.JKT, accessToken)
+		reqCtx := w_utils.GetRequestContext(c.Request.Context(), deps.Config)
+
+		_, err = deps.Session.ValidateSession(c.Request.Context(), userID, proof_.JKT, accessToken)
 		if err != nil {
 			c.Abort()
 			resp := w_resp.NewAppError(401, err, time.Now())
-			w_resp.WriteErrorWithLog(c, core.Logger, core.Config, resp)
+			w_resp.WriteErrorWithLog(c, deps.Logger, deps.Config, resp)
 			return
 		}
 
 		reqCtx.Sub = claims.Subject
 		reqCtx.Tid = claims.ID
-		ctx := w_utils.SaveRequestContext(c.Request.Context(), reqCtx, core.Config)
+		ctx := w_utils.SaveRequestContext(c.Request.Context(), reqCtx, deps.Config)
 		c.Request = c.Request.WithContext(ctx)
 
 		// RBAC
@@ -91,7 +139,7 @@ func AuthMiddleware(usecaseRefresh UsecaseRefresh, core *core.CoreServices) gin.
 		go func() {
 			ctxBg, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancel()
-			core.Session.UpdateLastActive(ctxBg, userID, dpopProof)
+			deps.Session.UpdateLastActive(ctxBg, userID, dpopProof)
 		}()
 	}
 }
