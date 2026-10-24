@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"context"
-	domainUser "github.com/DVV-15324/witches-auth/internal/shared/domain"
+	domainUser "github.com/DVV-15324/witches-auth/pkg/shared/domain"
 )
 
 func (u *UserUseCase) CreateUser(ctx context.Context, user *domainUser.User) (int64, *w_resp.AppError) {

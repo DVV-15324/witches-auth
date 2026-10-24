@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"github.com/DVV-15324/witches-auth/cmd/server/core"
-	domainRefresh "github.com/DVV-15324/witches-auth/internal/shared/domain"
 	utils "github.com/DVV-15324/witches-auth/internal/shared/utils"
+	domainRefresh "github.com/DVV-15324/witches-auth/pkg/shared/domain"
 	"strings"
 	"time"
 

@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
-	domainUser "github.com/DVV-15324/witches-auth/internal/shared/domain"
 	mapping "github.com/DVV-15324/witches-auth/internal/user/mapping"
+	domainUser "github.com/DVV-15324/witches-auth/pkg/shared/domain"
 )
 
 func (u *UserRepository) CreateUser(ctx context.Context, user *domainUser.User) (int64, error) {

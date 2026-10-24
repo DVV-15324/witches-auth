@@ -77,7 +77,7 @@ func NewCoreServices(cfg *wcmd_utils.Config) *CoreServices {
 	blacklistService := pkg.NewBlacklistService(redisClient.GetClient(), REVOKED_TTL)
 	helper := w_utils.NewHelper(cfg)
 	txManager := w_utils.NewTxManager(db.DB)
-
+	hashLen := int64(16)
 	// Hash Pass
 	hash := new(pkg.Hash)
 	return &CoreServices{
@@ -87,6 +87,7 @@ func NewCoreServices(cfg *wcmd_utils.Config) *CoreServices {
 		Redis:      redisClient,
 		Limiter:    limiterInstance,
 		JWT:        jwt,
+		HashLen:    hashLen,
 		Session:    sessionService,
 		Blacklist:  blacklistService,
 		Helper:     helper,

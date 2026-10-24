@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 	"github.com/DVV-15324/witches-auth/internal/auth/mapping"
-	domainAuth "github.com/DVV-15324/witches-auth/internal/shared/domain"
+	domainAuth "github.com/DVV-15324/witches-auth/pkg/shared/domain"
 )
 
 func (r *AuthRepository) CreateAuth(ctx context.Context, domainAuth *domainAuth.Auth) error {

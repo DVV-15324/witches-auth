@@ -4,11 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	domainAuth "github.com/DVV-15324/witches-auth/internal/shared/domain"
-	domainToken "github.com/DVV-15324/witches-auth/internal/shared/domain"
 	utils "github.com/DVV-15324/witches-auth/internal/shared/utils"
 	pkg "github.com/DVV-15324/witches-auth/pkg"
 	pkg_dpop "github.com/DVV-15324/witches-auth/pkg/dpop"
+	domainAuth "github.com/DVV-15324/witches-auth/pkg/shared/domain"
+	domainToken "github.com/DVV-15324/witches-auth/pkg/shared/domain"
 	"time"
 
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"

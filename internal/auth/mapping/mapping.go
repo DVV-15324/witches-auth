@@ -3,8 +3,8 @@ package mapping
 import (
 	dtoAuth "github.com/DVV-15324/witches-auth/internal/auth/dto/request"
 	modelAuth "github.com/DVV-15324/witches-auth/internal/auth/model"
-	domainAuth "github.com/DVV-15324/witches-auth/internal/shared/domain"
 	pkg_dpop "github.com/DVV-15324/witches-auth/pkg/dpop"
+	domainAuth "github.com/DVV-15324/witches-auth/pkg/shared/domain"
 )
 
 func FromRegisterToDomainAuth(dtoAuth *dtoAuth.Register) *domainAuth.Auth {

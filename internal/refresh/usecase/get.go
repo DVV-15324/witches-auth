@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
-	domainRefresh "github.com/DVV-15324/witches-auth/internal/shared/domain"
+	domainRefresh "github.com/DVV-15324/witches-auth/pkg/shared/domain"
 	"time"
 
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"
