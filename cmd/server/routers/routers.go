@@ -5,8 +5,8 @@ import (
 	"log"
 
 	"github.com/DVV-15324/witches-auth/cmd/server/core"
+	pkg_middleware "github.com/DVV-15324/witches-auth/internal/auth/middleware"
 	"github.com/DVV-15324/witches-auth/internal/shared/middleware"
-	pkg_middleware "github.com/DVV-15324/witches-auth/pkg/middleware"
 	w_handl "github.com/DVV-15324/witches/pkg/core/handler"
 	w_utils "github.com/DVV-15324/witches/pkg/core/utils"
 	"github.com/gin-gonic/gin"
