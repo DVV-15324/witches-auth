@@ -3,9 +3,9 @@ package handler
 import (
 	"context"
 	"github.com/DVV-15324/witches-auth/cmd/server/core"
+	domainAuth "github.com/DVV-15324/witches-auth/internal/shared/domain"
 	pkg "github.com/DVV-15324/witches-auth/pkg"
 	pkg_dpop "github.com/DVV-15324/witches-auth/pkg/dpop"
-	domainAuth "github.com/DVV-15324/witches-auth/pkg/shared/domain"
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"
 )
 

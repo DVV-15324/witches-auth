@@ -5,7 +5,7 @@ import (
 	"errors"
 	mapping "github.com/DVV-15324/witches-auth/internal/refresh/mapping"
 	modelRefresh "github.com/DVV-15324/witches-auth/internal/refresh/model"
-	domainRefresh "github.com/DVV-15324/witches-auth/pkg/shared/domain"
+	domainRefresh "github.com/DVV-15324/witches-auth/internal/shared/domain"
 	"gorm.io/gorm"
 	"time"
 )

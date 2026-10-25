@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/DVV-15324/witches-auth/cmd/server/core"
-	domain "github.com/DVV-15324/witches-auth/pkg/shared/domain"
+	domain "github.com/DVV-15324/witches-auth/internal/shared/domain"
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"
 	w_utils "github.com/DVV-15324/witches/pkg/core/utils"
 

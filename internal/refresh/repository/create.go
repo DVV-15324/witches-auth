@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 	mapping "github.com/DVV-15324/witches-auth/internal/refresh/mapping"
-	domainRefresh "github.com/DVV-15324/witches-auth/pkg/shared/domain"
+	domainRefresh "github.com/DVV-15324/witches-auth/internal/shared/domain"
 )
 
 func (r *RefreshTokenRepository) Create(ctx context.Context, token *domainRefresh.RefreshToken) error {

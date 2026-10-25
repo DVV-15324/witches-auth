@@ -2,7 +2,7 @@ package mapping
 
 import (
 	modelRefresh "github.com/DVV-15324/witches-auth/internal/refresh/model"
-	domainRefresh "github.com/DVV-15324/witches-auth/pkg/shared/domain"
+	domainRefresh "github.com/DVV-15324/witches-auth/internal/shared/domain"
 )
 
 func FromDomainToModelRefresh(domain *domainRefresh.RefreshToken) *modelRefresh.RefreshToken {

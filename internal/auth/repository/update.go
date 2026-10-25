@@ -5,7 +5,7 @@ import (
 
 	"github.com/DVV-15324/witches-auth/internal/auth/mapping"
 	modelAuth "github.com/DVV-15324/witches-auth/internal/auth/model"
-	domainAuth "github.com/DVV-15324/witches-auth/pkg/shared/domain"
+	domainAuth "github.com/DVV-15324/witches-auth/internal/shared/domain"
 )
 
 func (r *AuthRepository) UpdateAuth(ctx context.Context, modleAuth *domainAuth.Auth) error {

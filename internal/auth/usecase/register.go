@@ -8,8 +8,8 @@ import (
 	pkg "github.com/DVV-15324/witches-auth/pkg"
 	w_resp "github.com/DVV-15324/witches/pkg/core/response"
 
-	domainAuth "github.com/DVV-15324/witches-auth/pkg/shared/domain"
-	domainUser "github.com/DVV-15324/witches-auth/pkg/shared/domain"
+	domainAuth "github.com/DVV-15324/witches-auth/internal/shared/domain"
+	domainUser "github.com/DVV-15324/witches-auth/internal/shared/domain"
 )
 
 func (a *AuthUseCase) Register(ctx context.Context, auth *domainAuth.Auth, name string) *w_resp.AppError {

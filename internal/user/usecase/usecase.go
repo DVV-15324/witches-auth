@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/DVV-15324/witches-auth/cmd/server/core"
 
-	domainUser "github.com/DVV-15324/witches-auth/pkg/shared/domain"
+	domainUser "github.com/DVV-15324/witches-auth/internal/shared/domain"
 	w_utils "github.com/DVV-15324/witches/pkg/core/utils"
 )
 

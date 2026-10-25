@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
+	domainRefresh "github.com/DVV-15324/witches-auth/internal/shared/domain"
 	utils "github.com/DVV-15324/witches-auth/internal/shared/utils"
 	pkg "github.com/DVV-15324/witches-auth/pkg"
-	domainRefresh "github.com/DVV-15324/witches-auth/pkg/shared/domain"
 	// Thư viện dùng chung (Witches)
 	pkg_dpop "github.com/DVV-15324/witches-auth/pkg/dpop"
 	wcmd_utils "github.com/DVV-15324/witches/cmd/utils"
