@@ -2,12 +2,10 @@ package utils
 
 import (
 	"context"
-	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -20,6 +18,7 @@ type SessionCache struct {
 	SessionID   string `json:"session_id"`
 	UserID      int64  `json:"user_id"`
 	JKT         string `json:"jkt"`
+	Role        string `json:"role"`
 	AccessToken string `json:"access_token"`
 	LastActive  int64  `json:"last_active"`
 }
@@ -38,43 +37,25 @@ func NewSessionService(redis *redis.Client, SessionTTL, IdleTimeout int64) *Sess
 	}
 }
 
-func (s *SessionService) cacheKeyByToken(userID int64, accessToken string) string {
-	h := sha256.Sum256([]byte(accessToken))
-	return fmt.Sprintf("session:user:%d:token:%x", userID, h)
+// mobile
+func (s *SessionService) cacheKeyByJKT(userID int64, jkt string) string {
+	return fmt.Sprintf("session:user:%d:jkt:%s", userID, jkt)
 }
 
-func (s *SessionService) CreateSession(ctx context.Context, session *SessionCache) error {
-	if session == nil {
-		return fmt.Errorf("session cannot be nil")
-	}
-	if session.UserID == 0 {
-		return fmt.Errorf("user_id required")
-	}
-	if session.AccessToken == "" {
-		return fmt.Errorf("access_token required")
-	}
-	// Chỉ mobile mới cần JKT; web thì rỗng là bình thường
-	if session.SessionID == "" {
-		session.SessionID = uuid.New().String()
-	}
-	if session.LastActive == 0 {
-		session.LastActive = time.Now().Unix()
-	}
-
-	key := s.cacheKeyByToken(session.UserID, session.AccessToken)
-	data, err := json.Marshal(session)
-	if err != nil {
-		return err
-	}
-
-	ttl := time.Duration(s.SessionTTL) * time.Second
-	return s.redis.Set(ctx, key, data, ttl).Err()
+// website
+func (s *SessionService) cacheKeyBySessionID(userID int64, sessionID string) string {
+	return fmt.Sprintf("session:user:%d:sessionID:%s", userID, sessionID)
 }
 
-func (s *SessionService) GetSessionByToken(ctx context.Context, userID int64, accessToken string) (*SessionCache, error) {
-	return s.getByKey(ctx, s.cacheKeyByToken(userID, accessToken))
+// set cache
+func (s *SessionService) cacheKeyFor(session *SessionCache) string {
+	if session.JKT != "" {
+		return s.cacheKeyByJKT(session.UserID, session.JKT)
+	}
+	return s.cacheKeyBySessionID(session.UserID, session.SessionID)
 }
 
+// get cache
 func (s *SessionService) getByKey(ctx context.Context, key string) (*SessionCache, error) {
 	data, err := s.redis.Get(ctx, key).Result()
 	if err != nil {
@@ -90,65 +71,115 @@ func (s *SessionService) getByKey(ctx context.Context, key string) (*SessionCach
 	return &session, nil
 }
 
-func (s *SessionService) DeleteSessionByToken(ctx context.Context, userID int64, accessToken string) error {
-	return s.redis.Del(ctx, s.cacheKeyByToken(userID, accessToken)).Err()
+func (s *SessionService) CreateSession(ctx context.Context, session *SessionCache) error {
+	if session == nil {
+		return fmt.Errorf("session cannot be nil")
+	}
+	if session.SessionID == "" {
+		return fmt.Errorf("SessionID required")
+	}
+	if session.UserID == 0 {
+		return fmt.Errorf("user_id required")
+	}
+	if session.AccessToken == "" {
+		return fmt.Errorf("access_token required")
+	}
+	if session.LastActive == 0 {
+		session.LastActive = time.Now().Unix()
+	}
+	data, err := json.Marshal(session)
+	if err != nil {
+		return err
+	}
+	ttl := time.Duration(s.SessionTTL) * time.Second
+	return s.redis.Set(ctx, s.cacheKeyFor(session), data, ttl).Err()
 }
 
-func (s *SessionService) UpdateSession(ctx context.Context, userID int64, oldAccessToken, newAccessToken string) error {
-	var (
-		session *SessionCache
-		err     error
-	)
-	session, err = s.GetSessionByToken(ctx, userID, oldAccessToken)
+func (s *SessionService) GetSessionByJKT(ctx context.Context, userID int64, jkt string) (*SessionCache, error) {
+	return s.getByKey(ctx, s.cacheKeyByJKT(userID, jkt))
+}
+
+func (s *SessionService) GetSessionBySessionID(ctx context.Context, userID int64, sessionID string) (*SessionCache, error) {
+	return s.getByKey(ctx, s.cacheKeyBySessionID(userID, sessionID))
+}
+
+func (s *SessionService) DeleteSessionBySessionID(ctx context.Context, userID int64, sessionID string) error {
+	return s.redis.Del(ctx, s.cacheKeyBySessionID(userID, sessionID)).Err()
+}
+
+func (s *SessionService) DeleteSessionByJKT(ctx context.Context, userID int64, jkt string) error {
+	return s.redis.Del(ctx, s.cacheKeyByJKT(userID, jkt)).Err()
+}
+
+func (s *SessionService) UpdateSessionBySessionID(ctx context.Context, userID int64, sessionID, newAccessToken string) error {
+	session, err := s.GetSessionBySessionID(ctx, userID, sessionID)
 	if err != nil {
 		return err
 	}
 	if session == nil {
 		return fmt.Errorf("session not found for user %d", userID)
-	}
-
-	if oldAccessToken != newAccessToken {
-		_ = s.DeleteSessionByToken(ctx, userID, oldAccessToken)
 	}
 	session.AccessToken = newAccessToken
 	session.LastActive = time.Now().Unix()
 	return s.CreateSession(ctx, session)
 }
 
-func (s *SessionService) UpdateLastActive(ctx context.Context, userID int64, accessToken string) error {
-	var (
-		session *SessionCache
-		err     error
-	)
-	session, err = s.GetSessionByToken(ctx, userID, accessToken)
+func (s *SessionService) UpdateSessionByJKT(ctx context.Context, userID int64, JKT, newAccessToken string) error {
+	session, err := s.GetSessionByJKT(ctx, userID, JKT)
 	if err != nil {
 		return err
 	}
 	if session == nil {
 		return fmt.Errorf("session not found for user %d", userID)
 	}
-
+	session.AccessToken = newAccessToken
 	session.LastActive = time.Now().Unix()
 	return s.CreateSession(ctx, session)
 }
 
-func (s *SessionService) ValidateSession(ctx context.Context, userID int64, jkt string, accessToken string) (*SessionCache, error) {
-	var (
-		session *SessionCache
-		err     error
-	)
-	session, err = s.GetSessionByToken(ctx, userID, accessToken)
+func (s *SessionService) UpdateLastActiveBySessionID(ctx context.Context, userID int64, sessionID string) error {
+	session, err := s.GetSessionBySessionID(ctx, userID, sessionID)
+	if err != nil {
+		return err
+	}
+	if session == nil {
+		return fmt.Errorf("session not found for user %d", userID)
+	}
+	session.LastActive = time.Now().Unix()
+	return s.CreateSession(ctx, session)
+}
+
+func (s *SessionService) UpdateLastActiveByJKT(ctx context.Context, userID int64, JKT string) error {
+	session, err := s.GetSessionByJKT(ctx, userID, JKT)
+	if err != nil {
+		return err
+	}
+	if session == nil {
+		return fmt.Errorf("session not found for user %d", userID)
+	}
+	session.LastActive = time.Now().Unix()
+	return s.CreateSession(ctx, session)
+}
+
+func (s *SessionService) ValidateSession(ctx context.Context, userID int64, jkt string, sessionID string, accessToken string) (*SessionCache, error) {
+	var session *SessionCache
+	var err error
+
+	if jkt != "" {
+		session, err = s.GetSessionByJKT(ctx, userID, jkt)
+	} else {
+		session, err = s.GetSessionBySessionID(ctx, userID, sessionID)
+	}
 	if err != nil {
 		return nil, err
 	}
 	if session == nil {
 		return nil, fmt.Errorf("session not found")
 	}
-
 	if session.AccessToken != accessToken {
 		return nil, fmt.Errorf("token mismatch")
 	}
-	if session.JKT != jkt {
+	if jkt != "" && session.JKT != jkt {
 		return nil, fmt.Errorf("jkt mismatch")
 	}
 	now := time.Now().Unix()

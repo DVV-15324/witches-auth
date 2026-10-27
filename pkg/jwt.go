@@ -8,7 +8,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-// Định nghĩa các lỗi cụ thể
 var (
 	ErrTokenExpired     = errors.New("token has expired")
 	ErrInvalidSignature = errors.New("invalid token signature")
@@ -22,7 +21,7 @@ var (
 
 type Token struct {
 	Token    string `json:"token"`
-	ExpireAt int64  `json:"expire_at"` // Unix timestamp (giây)
+	ExpireAt int64  `json:"expire_at"`
 }
 
 type TokenResponse struct {
@@ -30,7 +29,6 @@ type TokenResponse struct {
 	RefreshToken Token `json:"refresh_token"`
 }
 
-// Confirmation — RFC 7800
 type Confirmation struct {
 	JKT string `json:"jkt,omitempty"`
 }
@@ -38,6 +36,7 @@ type Confirmation struct {
 type JwtClaims struct {
 	jwt.RegisteredClaims
 	CNF *Confirmation `json:"cnf,omitempty"`
+	SID string        `json:"sid,omitempty"`
 }
 
 func (c *JwtClaims) GetJKT() string {
@@ -47,10 +46,17 @@ func (c *JwtClaims) GetJKT() string {
 	return c.CNF.JKT
 }
 
+func (c *JwtClaims) GetSID() string {
+	if c == nil {
+		return ""
+	}
+	return c.SID
+}
+
 type JwtService struct {
 	secretKey          string
-	AccessTokenExpiry  int64 // giây
-	RefreshTokenExpiry int64 // giây
+	AccessTokenExpiry  int64
+	RefreshTokenExpiry int64
 }
 
 func NewJwtService(secretKey string, accessExpiry, refreshExpiry int64) *JwtService {
@@ -61,7 +67,7 @@ func NewJwtService(secretKey string, accessExpiry, refreshExpiry int64) *JwtServ
 	}
 }
 
-func (j *JwtService) IssueAccessToken(ctx context.Context, sub, tid, jkt string) (*Token, error) {
+func (j *JwtService) IssueAccessToken(ctx context.Context, sub, tid, jkt, sid string) (*Token, error) {
 	now := time.Now()
 	exp := now.Add(time.Duration(j.AccessTokenExpiry) * time.Second)
 
@@ -74,6 +80,7 @@ func (j *JwtService) IssueAccessToken(ctx context.Context, sub, tid, jkt string)
 			ExpiresAt: jwt.NewNumericDate(exp),
 		},
 		CNF: &Confirmation{JKT: jkt},
+		SID: sid,
 	}
 
 	signedToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).
@@ -85,7 +92,7 @@ func (j *JwtService) IssueAccessToken(ctx context.Context, sub, tid, jkt string)
 	return &Token{Token: signedToken, ExpireAt: exp.Unix()}, nil
 }
 
-func (j *JwtService) IssueRefreshToken(ctx context.Context, sub, tid, jkt string) (*Token, error) {
+func (j *JwtService) IssueRefreshToken(ctx context.Context, sub, tid, jkt, sid string) (*Token, error) {
 	now := time.Now()
 	exp := now.Add(time.Duration(j.RefreshTokenExpiry) * time.Second)
 
@@ -98,6 +105,7 @@ func (j *JwtService) IssueRefreshToken(ctx context.Context, sub, tid, jkt string
 			ExpiresAt: jwt.NewNumericDate(exp),
 		},
 		CNF: &Confirmation{JKT: jkt},
+		SID: sid,
 	}
 
 	signedToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).
@@ -109,13 +117,13 @@ func (j *JwtService) IssueRefreshToken(ctx context.Context, sub, tid, jkt string
 	return &Token{Token: signedToken, ExpireAt: exp.Unix()}, nil
 }
 
-func (j *JwtService) IssueTokenPair(ctx context.Context, sub, tid, jkt string) (*TokenResponse, error) {
-	accessToken, err := j.IssueAccessToken(ctx, sub, tid, jkt)
+func (j *JwtService) IssueTokenPair(ctx context.Context, sub, tid, jkt, sid string) (*TokenResponse, error) {
+	accessToken, err := j.IssueAccessToken(ctx, sub, tid, jkt, sid)
 	if err != nil {
 		return nil, err
 	}
 
-	refreshToken, err := j.IssueRefreshToken(ctx, sub, tid, jkt)
+	refreshToken, err := j.IssueRefreshToken(ctx, sub, tid, jkt, sid)
 	if err != nil {
 		return nil, err
 	}
