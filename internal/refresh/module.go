@@ -51,7 +51,7 @@ func (m *RefreshModule) RegisterPublicRoutes(gen *w_handl.SwaggerGenerator) {
 		Body(dtoRefresh.RefreshTokenRequest{}, "Refresh token").
 		Response(200, w_resp.AppResponse{}, "Token refreshed successfully").
 		Response(401, w_resp.AppResponse{}, "Invalid or expired refresh token").
-		Handler(m.Handler.HandleRefreshToken()).
+		//Handler(m.Handler.HandleRefreshToken()).
 		Build()
 }
 

@@ -25,10 +25,10 @@ func RegisterRoutes(r *gin.Engine, core *core.CoreServices, modules *Modules) {
 		pkg_middleware.AuthDependencies{
 			UsecaseRefresh: modules.Refresh.Usecase,
 			JWT:            core.JWT,
-			Blacklist:      core.Blacklist,
-			Session:        core.Session,
-			Logger:         core.Logger,
-			Config:         core.Config,
+			//Blacklist:      core.Blacklist,
+			Session: core.Session,
+			Logger:  core.Logger,
+			Config:  core.Config,
 		},
 	)
 	core.Middleware = authMiddleware

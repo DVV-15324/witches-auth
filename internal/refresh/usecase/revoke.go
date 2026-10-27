@@ -52,10 +52,10 @@ func (uc *RefreshUseCase) Revoke(
 		}
 	}
 
-	// Blacklist — quan trọng, không nuốt error
-	if err := uc.Core.Blacklist.BlacklistToken(ctx, refreshToken); err != nil {
-		return w_resp.NewAppError(500, fmt.Errorf("blacklist token: %w", err), time.Now())
-	}
+	// // Blacklist — quan trọng, không nuốt error
+	// if err := uc.Core.Blacklist.BlacklistToken(ctx, refreshToken); err != nil {
+	// 	return w_resp.NewAppError(500, fmt.Errorf("blacklist token: %w", err), time.Now())
+	// }
 
 	// Xóa session Redis
 	if err := uc.Core.Session.DeleteSession(ctx, storedToken.UserID, jkt); err != nil {
@@ -90,13 +90,13 @@ func (uc *RefreshUseCase) RevokeByUserAndJKT(
 			fmt.Errorf("revoke by user+jkt: %w", err), time.Now())
 	}
 
-	// Blacklist từng token vừa revoke
-	for _, token := range revokedTokens {
-		if err := uc.Core.Blacklist.BlacklistToken(ctx, token); err != nil {
-			return revokedTokens, w_resp.NewAppError(500,
-				fmt.Errorf("blacklist token: %w", err), time.Now())
-		}
-	}
+	// // Blacklist từng token vừa revoke
+	// for _, token := range revokedTokens {
+	// 	if err := uc.Core.Blacklist.BlacklistToken(ctx, token); err != nil {
+	// 		return revokedTokens, w_resp.NewAppError(500,
+	// 			fmt.Errorf("blacklist token: %w", err), time.Now())
+	// 	}
+	// }
 
 	// Xóa session Redis — best effort
 	if err := uc.Core.Session.DeleteSession(ctx, userID, jkt); err != nil {

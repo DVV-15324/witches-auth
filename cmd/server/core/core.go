@@ -29,11 +29,11 @@ type CoreServices struct {
 	TxManager  *w_utils.TxManager
 	Middleware gin.HandlerFunc
 	// Add
-	JWT       *pkg.JwtService
-	Session   *pkg.SessionService
-	Blacklist *pkg.BlacklistService
-	Hash      *pkg.Hash
-	HashLen   int64
+	JWT     *pkg.JwtService
+	Session *pkg.SessionService
+	//Blacklist *pkg.BlacklistService
+	Hash    *pkg.Hash
+	HashLen int64
 }
 
 func NewCoreServices(cfg *wcmd_utils.Config) *CoreServices {
@@ -71,25 +71,25 @@ func NewCoreServices(cfg *wcmd_utils.Config) *CoreServices {
 	ACCESS_TOKEN_TTL, _ := strconv.ParseInt(cfg.Others["ACCESS_TOKEN_TTL"], 10, 64)
 	SESSION_TTL, _ := strconv.ParseInt(cfg.Others["SESSION_TTL"], 10, 64)
 	IDLE_TIMEOUT, _ := strconv.ParseInt(cfg.Others["IDLE_TIMEOUT"], 10, 64)
-	REVOKED_TTL, _ := strconv.ParseInt(cfg.Others["IDLE_TIMEOUT"], 10, 64)
+	//REVOKED_TTL, _ := strconv.ParseInt(cfg.Others["IDLE_TIMEOUT"], 10, 64)
 	jwt := pkg.NewJwtService(cfg.Others["JWT_SECRET"], ACCESS_TOKEN_TTL, REFRESH_TOKEN_TTL)
 	sessionService := pkg.NewSessionService(redisClient.GetClient(), SESSION_TTL, IDLE_TIMEOUT)
-	blacklistService := pkg.NewBlacklistService(redisClient.GetClient(), REVOKED_TTL)
+	//blacklistService := pkg.NewBlacklistService(redisClient.GetClient(), REVOKED_TTL)
 	helper := w_utils.NewHelper(cfg)
 	txManager := w_utils.NewTxManager(db.DB)
 	hashLen := int64(16)
 	// Hash Pass
 	hash := new(pkg.Hash)
 	return &CoreServices{
-		Config:     cfg,
-		Logger:     logg,
-		DB:         db.DB,
-		Redis:      redisClient,
-		Limiter:    limiterInstance,
-		JWT:        jwt,
-		HashLen:    hashLen,
-		Session:    sessionService,
-		Blacklist:  blacklistService,
+		Config:  cfg,
+		Logger:  logg,
+		DB:      db.DB,
+		Redis:   redisClient,
+		Limiter: limiterInstance,
+		JWT:     jwt,
+		HashLen: hashLen,
+		Session: sessionService,
+		//	Blacklist:  blacklistService,
 		Helper:     helper,
 		TxManager:  txManager,
 		Hash:       hash,

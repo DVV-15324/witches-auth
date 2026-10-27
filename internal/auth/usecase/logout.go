@@ -19,7 +19,7 @@ func (a *AuthUseCase) Logout(ctx context.Context, accessToken, refreshTokenStr s
 	if err := a.RefreshTokenUseCase.Revoke(ctx, refreshTokenStr, "user logout", token.Token); err != nil {
 		return err
 	}
-	a.Core.Blacklist.BlacklistToken(ctx, accessToken)
+	//a.Core.Blacklist.BlacklistToken(ctx, accessToken)
 	a.Core.Session.DeleteSession(ctx, token.UserID, token.Token)
 
 	return nil
