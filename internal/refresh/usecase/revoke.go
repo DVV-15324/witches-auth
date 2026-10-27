@@ -58,11 +58,11 @@ func (uc *RefreshUseCase) Revoke(
 	// }
 
 	// Xóa session Redis
-	if err := uc.Core.Session.DeleteSession(ctx, storedToken.UserID, jkt); err != nil {
-		// Session có thể không tồn tại → không fail cả logout
-		// Nếu cần strict hơn, đổi thành return AppError
-		_ = err
-	}
+	// if err := uc.Core.Session.DeleteSession(ctx, storedToken.UserID, jkt); err != nil {
+	// 	// Session có thể không tồn tại → không fail cả logout
+	// 	// Nếu cần strict hơn, đổi thành return AppError
+	// 	_ = err
+	// }
 
 	return nil
 }
@@ -99,9 +99,9 @@ func (uc *RefreshUseCase) RevokeByUserAndJKT(
 	// }
 
 	// Xóa session Redis — best effort
-	if err := uc.Core.Session.DeleteSession(ctx, userID, jkt); err != nil {
-		_ = err
-	}
+	// if err := uc.Core.Session.DeleteSession(ctx, userID, jkt); err != nil {
+	// 	_ = err
+	// }
 
 	return revokedTokens, nil
 }

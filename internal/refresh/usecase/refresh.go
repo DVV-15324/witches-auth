@@ -66,7 +66,7 @@ func (uc *RefreshUseCase) Refresh(ctx context.Context, refreshTokenStr, jkt stri
 	// 7. Session
 	if jkt != "" {
 		// Mobile: key cố định theo jkt
-		if err := uc.Core.Session.UpdateSession(ctx, auth.UserId, jkt, "", accessToken.Token); err != nil {
+		if err := uc.Core.Session.UpdateSession(ctx, auth.UserId, "", accessToken.Token); err != nil {
 			slog.Warn("UpdateSession (mobile) failed", "err", err, "userID", auth.UserId)
 		}
 	} else {
