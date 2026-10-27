@@ -57,7 +57,7 @@ func (uc *RefreshUseCase) Refresh(ctx context.Context, refreshTokenStr, jkt stri
 	sub := s.ToBase58()
 	tid := uuid.New().String()
 
-	accessToken, err := uc.Core.JWT.IssueAccessToken(ctx, sub, tid, jkt)
+	accessToken, err := uc.Core.JWT.IssueAccessToken(ctx, sub, tid, jkt, "")
 	if err != nil {
 		slog.Error("IssueAccessToken failed", "err", err, "userID", auth.UserId)
 		return nil, w_resp.NewAppError(500, errors.New("internal server error"), time.Now())
@@ -66,9 +66,9 @@ func (uc *RefreshUseCase) Refresh(ctx context.Context, refreshTokenStr, jkt stri
 	// 7. Session
 	if jkt != "" {
 		// Mobile: key cố định theo jkt
-		if err := uc.Core.Session.UpdateSession(ctx, auth.UserId, "", accessToken.Token); err != nil {
-			slog.Warn("UpdateSession (mobile) failed", "err", err, "userID", auth.UserId)
-		}
+		// if err := uc.Core.Session.UpdateSessionB(ctx, auth.UserId, "", accessToken.Token); err != nil {
+		// 	slog.Warn("UpdateSession (mobile) failed", "err", err, "userID", auth.UserId)
+		// }
 	} else {
 		// Web: tạo session mới theo sha256(newAT); old tự hết hạn qua TTL
 		if err := uc.Core.Session.CreateSession(ctx, &pkg.SessionCache{
